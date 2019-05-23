@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "roomId": 1,
+      "roomName": "ralles coola rum",
+      "messages": [
+        {
+          "user": "Ralle",
+          "message": "hej på er alla"
+        }
+      ]
+    },
+    {
+      "roomId": 2,
+      "roomName": "Backend room",
+      "messages": [
+        {
+          "user": "Nisse",
+          "message": "hej mitt namn är Nisse"
+        }
+      ]
+    }
+  ]
+}
