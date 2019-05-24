@@ -46,7 +46,7 @@ app.get('/rooms/:id', (req, res) => {
 
 //POST, Creating new room
 app.post('/rooms', (req, res) => {
-  if(!req.body.roomName || typeof req.body.roomName !== 'string'){
+  if(!req.body.roomName || typeof req.body.roomName !== 'string' || req.body.roomName.length > 20){
     res.status(400).end();
     return;
   }

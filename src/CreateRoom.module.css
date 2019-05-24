@@ -1,0 +1,115 @@
+.overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+}
+.container{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 35%;
+  min-width: 500px;
+  background: #fafafa;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.title-wrapper{
+  display: flex;
+  padding: 20px 0 20px 30px;
+  background: #373A36;
+  border-bottom: 7px solid #565953;
+}
+.title-icon{
+  font-size: 3rem;
+  color: #DEC79B;
+  margin-right: 10px;
+}
+.title{
+  font-size: 2.4rem;
+  font-weight: 400;
+  margin: 0;
+  color: #e1e6d7;
+}
+.content-wrapper{
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px 30px 20px;
+}
+.input-wrapper{
+  position: relative;
+  display: flex;
+  margin-bottom: 30px;
+}
+.name-input{
+  width: 100%;
+  font-size: 2rem;
+  padding: 10px;
+  border-radius: 5px;
+  background: #fafafa;
+  border: 1px solid #bdbdbd;
+  color: #373A36;
+}
+.error-msg{
+  position: absolute;
+  left: 15px;
+  bottom: -25px;
+  font-size: 1.4rem;
+  color: #B71C1C;
+  animation: shake 0.2s linear;
+}
+@keyframes shake {
+  0%{
+    transform: translate(0, 0);
+  }
+  50%{
+    transform: translate(0, -2px);
+  }
+  100%{
+    transform: translate(0, 0);
+  }
+}
+.btns-wrapper{
+  display: flex;
+  justify-content: flex-end;
+}
+.cancel-btn{
+  font-size: 2rem;
+  background: #fafafa;
+  border: 1px solid #bdbdbd;
+  color: #373A36;
+  padding: 5px 20px 5px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.cancel-btn:hover{
+  background: #f5f5f5;
+}
+.create-btn{
+  margin-left: 30px;
+  font-size: 2rem;
+  background: #DEC79B;
+  border: none;
+  padding: 5px 20px 5px 20px;
+  border-radius: 5px;
+  color: #373A36;
+  cursor: pointer;
+}
+.create-btn:hover{
+  opacity: 0.9;
+}
+.close-wrapper{
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}
+.close-icon{
+  color: #e1e6d7;
+  font-size: 2.4rem;
+  cursor: pointer;
+}
+.close-icon:hover{
+  opacity: 0.9;
+}

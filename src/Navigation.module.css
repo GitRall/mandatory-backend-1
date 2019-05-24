@@ -3,4 +3,50 @@
   width: 15%;
   height: 100%;
   background: #373A36;
+  border-right: 5px solid #565953;
+  box-sizing: border-box;
+}
+.user{
+  font-size: 1.6rem;
+  color: #e1e6d7;
+}
+.nav-title{
+  font-size: 2rem;
+  margin: 0;
+  color: #DEC79B;
+  padding: 30px 20px 10px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 400;
+  word-break: break-word;
+}
+.nav-btn{
+  display: flex;
+  width: 100%;
+  font-size: 1.6rem;
+  background: none;
+  border: none;
+  color: #e1e6d7;
+  padding: 10px 0 10px 20px;
+  cursor: pointer;
+}
+.list{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.list-item{
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1)
+}
+.list-link{
+  font-size: 1.6rem;
+  color: #e1e6d7;
+  text-decoration: none;
+  width: 100%;
+  padding: 10px 0 10px 20px;
+}
+.list-item:hover{
+  background: #3f403b;
 }
