@@ -6,22 +6,33 @@ let roomsData = require('./rooms.json');
 
 app.use(express.json());
 
+// Fixing CORS issue
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+//Returns unique ID for rooms
 function getRoomId(){
   let data = roomsData.data;
   let lastId = data[data.length - 1].roomId;
   return lastId += 1;
 }
 
+//Checks whether room with same name exists
 function verifyRoomName(name){
   let found = roomsData.data.find((room) => name.toLowerCase() === room.roomName.toLowerCase());
   return found ? false : true;
 }
 
+//GET all rooms
 app.get('/rooms', (req, res) => {
   res.status(200);
   res.send(roomsData);
 })
 
+//GET specific room from id
 app.get('/rooms/:id', (req, res) => {
   let found = roomsData.data.find((room) => room.roomId === parseInt(req.params.id))
   if(!found){
@@ -33,6 +44,7 @@ app.get('/rooms/:id', (req, res) => {
   res.send({data: found});
 })
 
+//POST, Creating new room
 app.post('/rooms', (req, res) => {
   if(!req.body.roomName || typeof req.body.roomName !== 'string'){
     res.status(400).end();
@@ -55,6 +67,7 @@ app.post('/rooms', (req, res) => {
   })
 })
 
+//DELETE, Removes room with ID
 app.delete('/rooms/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if(!id){
@@ -71,4 +84,5 @@ app.delete('/rooms/:id', (req, res) => {
   })
 })
 
+//Server startup
 app.listen(port, () => console.log(`Listening on port ${port}!`));
