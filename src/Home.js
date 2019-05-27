@@ -12,7 +12,7 @@ const Home = (props) => {
   const [createModalError, setCreateModalError] = useState('');
 
   function getNewRoom(){
-    axios.get('http://localhost:3001/rooms')
+    axios.get('/rooms')
     .then((res) => {
       console.log(res);
       setRooms(res.data.data);
@@ -43,7 +43,7 @@ const Home = (props) => {
   // }
 
   useEffect(() => {
-    axios.get('http://localhost:3001/rooms')
+    axios.get('/rooms')
     .then((res) => {
       setRooms(res.data.data);
     })

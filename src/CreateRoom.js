@@ -14,7 +14,7 @@ const CreateRoom = (props) => {
     const obj = {
       roomName: channelName,
     }
-    axios.post('http://localhost:3001/rooms', obj, { cancelToken: source.token })
+    axios.post('/rooms', obj, { cancelToken: source.token })
     .then((res) => {
       console.log(res);
       props.getNewRoom();
