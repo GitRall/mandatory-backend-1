@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './CreateRoom.module.css';
 import axios from 'axios';
 
 const CreateRoom = (props) => {
   const [channelName, setChannelName] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const inputRef = useRef(null);
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
 
@@ -43,6 +44,10 @@ const CreateRoom = (props) => {
   }
 
   useEffect(() => {
+    inputRef.current.focus();
+  },[])
+
+  useEffect(() => {
     return () => {
       source.cancel('CANCELED');
     }
@@ -60,7 +65,7 @@ const CreateRoom = (props) => {
         </span>
         <div className={styles['content-wrapper']}>
           <span className={styles['input-wrapper']}>
-            <input className={styles['name-input']} type='text' onChange={onChangeName} value={channelName}/>
+            <input className={styles['name-input']} type='text' ref={inputRef} onChange={onChangeName} value={channelName}/>
             { errorMsg ? <span className={styles['error-msg']}>{errorMsg}</span> : null }
           </span>
           <span className={styles['btns-wrapper']}>

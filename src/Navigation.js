@@ -16,13 +16,13 @@ const Navigation = (props) => {
 
   return (
     <nav className={styles.container}>
-      <h4 className={styles['nav-title']}>Ralle</h4>
+      <h4 className={styles['nav-title']}>{props.username}</h4>
       <ul className={styles.list}>
         <li className={styles['list-item']}>
           <button className={styles['nav-btn']} onClick={props.showCreateModal}>Create channel</button>
         </li>
         <li className={styles['list-item']}>
-          <button className={styles['nav-btn']}>Remove channel</button>
+          <button className={styles['nav-btn']} onClick={props.showRemoveModal}>Remove channel</button>
         </li>
       </ul>
       <h4 className={styles['nav-title']}>Channels</h4>

@@ -9,7 +9,16 @@ app.use(express.json());
 //Returns unique ID for rooms
 function getRoomId(){
   let data = roomsData.data;
+  if(data.length <= 0) return 1;
   let lastId = data[data.length - 1].roomId;
+  return lastId += 1;
+}
+
+function getMessageId(room){
+  console.log(room);
+  let data = room.messages
+  if(data.length <= 0) return 1;
+  let lastId = data[data.length - 1].msgId;
   return lastId += 1;
 }
 
@@ -56,7 +65,24 @@ app.post('/rooms', (req, res) => {
   fs.writeFile('./rooms.json', JSON.stringify(roomsData), function(err) {
     if(err) throw err;
     res.status(201);
-    res.send(newRoom);
+    res.send({ data: newRoom });
+  })
+})
+
+app.post('/rooms/:id', (req, res) => {
+  let found = roomsData.data.find((room) => room.roomId === parseInt(req.params.id));
+  let id = getMessageId(found);
+  console.log(id);
+  let newMsg = {
+    msgId: id,
+    user: req.body.user,
+    message: req.body.message
+  }
+  found.messages.push(newMsg);
+  fs.writeFile('./rooms.json', JSON.stringify(roomsData), function(err){
+    if(err) throw err;
+    res.status(201);
+    res.send({ data: newMsg });
   })
 })
 

@@ -1,0 +1,119 @@
+.overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+}
+.container{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 35%;
+  min-width: 500px;
+  background: #fafafa;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.title-wrapper{
+  display: flex;
+  padding: 20px 0 20px 30px;
+  background: #373A36;
+  border-bottom: 7px solid #565953;
+}
+.title-icon{
+  font-size: 3rem;
+  color: #DEC79B;
+  margin-right: 10px;
+}
+.title{
+  font-size: 2.4rem;
+  font-weight: 400;
+  margin: 0;
+  color: #e1e6d7;
+}
+.list-wrapper{
+  width: 100%;
+  height: 300px;
+  overflow: auto;
+}
+.list-item{
+  position: relative;
+  width: 100%;
+  height: 50px;
+}
+.list-radio{
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  width: 100%;
+  height: 50px;
+  opacity: 0.01;
+  z-index: 10000;
+  cursor: pointer;
+}
+.list-checkmark{
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  width: 100%;
+  height: 50px;
+  font-size: 2rem;
+  color: #373A36;
+  padding: 0 5px 0 15px;
+  box-sizing: border-box;
+}
+.list-radio:checked ~ .list-checkmark {
+  background: rgba(222, 199, 155, 0.3);
+}
+.btns-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  /* background: #f5f5f5; */
+  padding: 30px 20px 30px 20px;
+  border-top: 1px solid #eee;
+}
+
+.cancel-btn{
+  font-size: 2rem;
+  background: #fafafa;
+  border: 1px solid #bdbdbd;
+  color: #373A36;
+  padding: 5px 20px 5px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.cancel-btn:hover{
+  background: #f5f5f5;
+}
+.remove-btn{
+  margin-left: 30px;
+  font-size: 2rem;
+  background: #DEC79B;
+  border: none;
+  padding: 5px 20px 5px 20px;
+  border-radius: 5px;
+  color: #373A36;
+  cursor: pointer;
+}
+.remove-btn:hover{
+  opacity: 0.9;
+}
+.close-wrapper{
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}
+.close-icon{
+  color: #e1e6d7;
+  font-size: 2.4rem;
+  cursor: pointer;
+}
+.close-icon:hover{
+  opacity: 0.9;
+}

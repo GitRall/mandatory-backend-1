@@ -1,5 +1,39 @@
 .container{
   width: 100vw;
   height: 100vh;
-  background: lightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #373A36;
+}
+.login-wrapper{
+  width: 30%;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-label{
+  width: 100%;
+  font-size: 2.4rem;
+  color: #DEC79B;
+  margin-bottom: 30px;
+}
+.user-input{
+  width: 100%;
+  font-size: 2rem;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  border-radius: 5px;
+  color: #e1e6d7;
+  margin-top: 3px;
+}
+.connect-btn{
+  font-size: 2.4rem;
+  background: #DEC79B;
+  border: none;
+  padding: 5px 20px 5px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
