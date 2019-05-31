@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Redirect } from 'react-router-dom';
 import styles from './Home.module.css';
 import Navigation from './Navigation';
@@ -7,9 +7,12 @@ import Sidebar from './Sidebar';
 import CreateRoom from './CreateRoom';
 import RemoveRoom from './RemoveRoom';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+let socket;
 
 const Home = (props) => {
-  console.log(props.location);
+
   const currentPath = props.location.pathname.substring(5);
 
   const [redirectLogin, setRedirectLogin] = useState(false);
@@ -17,8 +20,11 @@ const Home = (props) => {
   const [rooms, setRooms] = useState([]);
   const [currentRoom, setCurrentRoom] = useState({});
   const [createModal, setCreateModal] = useState(false);
-  const [createModalError, setCreateModalError] = useState('');
   const [removeModal, setRemoveModal] = useState(false);
+
+  function emitData(){
+    socket.emit('all data');
+  }
 
   function getNewRoom(){
     axios.get('/rooms')
@@ -33,7 +39,7 @@ const Home = (props) => {
   useEffect(() => {
     let found = rooms.find((room) => room.roomName === currentPath.substring(1))
     setCurrentRoom(found);
-  },[currentPath])
+  },[currentPath, rooms])
 
   useEffect(() => {
     if(!props.location.state) {
@@ -41,6 +47,19 @@ const Home = (props) => {
       return;
     }
     else {
+      socket = io('http://localhost:3001/');
+      socket.on('connect', function(){
+        console.log('connected');
+      })
+      socket.on('disconnect', function(){
+        console.log('disconnected');
+      })
+      socket.on('all data', function(data){
+        console.log(data);
+        console.log(socket);
+        setRooms(data.data);
+      })
+      console.log(socket);
       setUsername(props.location.state.username);
     }
     axios.get('/rooms')
@@ -57,10 +76,10 @@ const Home = (props) => {
   return (
     <div className={styles.container}>
       <Navigation rooms={rooms} showCreateModal={() => setCreateModal(true)} showRemoveModal={() => setRemoveModal(true)} username={username}/>
-      <Content currentRoom={currentRoom} username={username}/>
+      <Content currentRoom={currentRoom} username={username} getNewRoom={getNewRoom} emitMessage={emitData}/>
       <Sidebar />
-      { createModal ? <CreateRoom hideCreateModal={() => setCreateModal(false)} getNewRoom={getNewRoom} /> : null }
-      { removeModal ? <RemoveRoom hideRemoveModal={() => setRemoveModal(false)} getNewRoom={getNewRoom} /> : null }
+      { createModal ? <CreateRoom hideCreateModal={() => setCreateModal(false)} emitCreateRoom={emitData} /> : null }
+      { removeModal ? <RemoveRoom hideRemoveModal={() => setRemoveModal(false)} emitRemoveRoom={emitData} /> : null }
     </div>
   )
 }

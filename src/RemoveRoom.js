@@ -11,7 +11,8 @@ const RemoveRoom = (props) => {
   function removeRoomRequest(){
     axios.delete(`/rooms/${selectedRoom.roomId}`, { cancelToken: source.token })
     .then((res) => {
-      props.getNewRoom();
+      props.emitRemoveRoom();
+      props.hideRemoveModal();
       console.log(res);
     })
     .catch((err) => {

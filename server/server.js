@@ -2,9 +2,12 @@ const express = require('express');
 const app = express();
 const port = 3001;
 const fs = require('fs');
+let socket = require('socket.io');
 let roomsData = require('./rooms.json');
 
 app.use(express.json());
+
+
 
 //Returns unique ID for rooms
 function getRoomId(){
@@ -15,7 +18,6 @@ function getRoomId(){
 }
 
 function getMessageId(room){
-  console.log(room);
   let data = room.messages
   if(data.length <= 0) return 1;
   let lastId = data[data.length - 1].msgId;
@@ -72,7 +74,6 @@ app.post('/rooms', (req, res) => {
 app.post('/rooms/:id', (req, res) => {
   let found = roomsData.data.find((room) => room.roomId === parseInt(req.params.id));
   let id = getMessageId(found);
-  console.log(id);
   let newMsg = {
     msgId: id,
     user: req.body.user,
@@ -103,5 +104,18 @@ app.delete('/rooms/:id', (req, res) => {
   })
 })
 
-//Server startup
-app.listen(port, () => console.log(`Listening on port ${port}!`));
+//Server setup
+let server = app.listen(port, () => console.log(`Listening on port ${port}!`));
+
+let io = socket(server);
+
+io.on('connection', function(socket){
+  console.log('a user connected', socket.id);
+  socket.on('all data', function(data){
+    io.sockets.emit('all data', roomsData);
+  })
+
+  socket.on('disconnect', function() {
+    console.log('disconnected', socket.id);
+  })
+})

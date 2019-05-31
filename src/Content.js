@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './Content.module.css';
 import Header from './Header';
 import axios from 'axios';
@@ -7,17 +7,19 @@ const Content = (props) => {
   const [myMessage, setMyMessage] = useState('');
   function sendMessageRequest(e){
     e.preventDefault();
+    if(!myMessage) return;
     let obj = {
       user: props.username,
       message: myMessage
     }
     axios.post(`/rooms/${props.currentRoom.roomId}`, obj)
     .then((res) => {
+      props.emitMessage();
+      setMyMessage('');
       console.log(res);
     })
   }
 
-  console.log(props.currentRoom);
   if(!props.currentRoom || !Object.entries(props.currentRoom).length){
     return (
       <section className={styles.container}>
@@ -41,10 +43,10 @@ const Content = (props) => {
               )
             })
           }
-          <form onSubmit={sendMessageRequest} className={styles['input-wrapper']}>
-            <input className={styles['message-input']} onChange={(e) => setMyMessage(e.target.value)}/>
-          </form>
         </div>
+        <form onSubmit={sendMessageRequest} className={styles['input-wrapper']}>
+          <input className={styles['message-input']} value={myMessage} onChange={(e) => setMyMessage(e.target.value)}/>
+        </form>
 
       </section>
     )
