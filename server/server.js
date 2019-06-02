@@ -61,6 +61,7 @@ app.post('/rooms', (req, res) => {
   let newRoom = {
     roomId: getRoomId(),
     roomName: req.body.roomName,
+    members: [],
     messages: [],
   }
   roomsData.data.push(newRoom);
@@ -74,6 +75,14 @@ app.post('/rooms', (req, res) => {
 app.post('/rooms/:id', (req, res) => {
   let found = roomsData.data.find((room) => room.roomId === parseInt(req.params.id));
   let id = getMessageId(found);
+  let memberIdx = found.members.findIndex((member) => req.body.user.toLowerCase() === member.user);
+  if(memberIdx === -1){
+    let memberObj = {
+      user: req.body.user.toLowerCase(),
+      isOnline: true,
+    }
+    found.members.push(memberObj);
+  }
   let newMsg = {
     msgId: id,
     user: req.body.user,
