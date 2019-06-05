@@ -31,7 +31,7 @@ const Content = (props) => {
   else{
     return (
       <section className={styles.container}>
-        <Header />
+        <Header currentRoom={props.currentRoom}/>
         <div className={styles['message-container']}>
           {
             props.currentRoom.messages.map((message) => {

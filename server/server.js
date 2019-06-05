@@ -119,12 +119,15 @@ let server = app.listen(port, () => console.log(`Listening on port ${port}!`));
 let io = socket(server);
 
 io.on('connection', function(socket){
+
   console.log('a user connected', socket.id);
   socket.on('all data', function(data){
     io.sockets.emit('all data', roomsData);
   })
 
-  socket.on('disconnect', function() {
+  socket.on('disconnect', function(data) {
     console.log('disconnected', socket.id);
+    io.sockets.emit('user_disconnect', roomsData);
   })
+
 })

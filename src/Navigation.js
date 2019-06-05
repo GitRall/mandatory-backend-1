@@ -29,6 +29,7 @@ const Navigation = (props) => {
       <ul className={styles.list}>
         {renderRoomsList()}
       </ul>
+      <Link to='/'>Logout</Link>
     </nav>
   )
 }

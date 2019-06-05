@@ -50,14 +50,20 @@ const Home = (props) => {
       socket = io('http://localhost:3001/');
       socket.on('connect', function(){
         console.log('connected');
+        console.log(socket);
       })
-      socket.on('disconnect', function(){
-        console.log('disconnected');
-      })
+      // socket.on('disconnect', function(){
+      //   console.log('disconnect CLIENT');
+        // socket.emit('user_disconnect');
+      // })
       socket.on('all data', function(data){
         console.log(data);
         console.log(socket);
         setRooms(data.data);
+      })
+      socket.on('user_disconnect', function(data){
+        console.log(data);
+        console.log('HELLO')
       })
       console.log(socket);
       setUsername(props.location.state.username);
@@ -68,6 +74,14 @@ const Home = (props) => {
     })
   }, [])
 
+  // useEffect(() => {
+  //   return () => {
+  //     socket.emit('disconnect');
+  //     console.log('hej');
+  //     // emitData();
+  //   }
+  // },[])
+
   if(redirectLogin){
     return (
       <Redirect to='/'/>
@@ -77,7 +91,7 @@ const Home = (props) => {
     <div className={styles.container}>
       <Navigation rooms={rooms} showCreateModal={() => setCreateModal(true)} showRemoveModal={() => setRemoveModal(true)} username={username}/>
       <Content currentRoom={currentRoom} username={username} getNewRoom={getNewRoom} emitMessage={emitData}/>
-      <Sidebar />
+      <Sidebar currentRoom={currentRoom}/>
       { createModal ? <CreateRoom hideCreateModal={() => setCreateModal(false)} emitCreateRoom={emitData} /> : null }
       { removeModal ? <RemoveRoom hideRemoveModal={() => setRemoveModal(false)} emitRemoveRoom={emitData} /> : null }
     </div>
