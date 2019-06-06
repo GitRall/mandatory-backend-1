@@ -4,6 +4,7 @@ const port = 3001;
 const fs = require('fs');
 let socket = require('socket.io');
 let roomsData = require('./rooms.json');
+let membersData = require('./members.json');
 
 app.use(express.json());
 
@@ -29,6 +30,11 @@ function verifyRoomName(name){
   let found = roomsData.data.find((room) => name.toLowerCase() === room.roomName.toLowerCase());
   return found ? false : true;
 }
+
+app.get('/members', (req, res) => {
+  res.status(200);
+  res.send(membersData);
+})
 
 //GET all rooms
 app.get('/rooms', (req, res) => {
@@ -79,7 +85,6 @@ app.post('/rooms/:id', (req, res) => {
   if(memberIdx === -1){
     let memberObj = {
       user: req.body.user.toLowerCase(),
-      isOnline: true,
     }
     found.members.push(memberObj);
   }
@@ -120,14 +125,77 @@ let io = socket(server);
 
 io.on('connection', function(socket){
 
+  socket.on('new_connection', function(data){
+    let foundMember = membersData.data.find((member) => member.user.toLowerCase() === data.toLowerCase());
+    if(!foundMember){
+      let obj = {
+        user: data.toLowerCase(),
+        socketId: socket.id,
+        isOnline: true
+      }
+      membersData.data.push(obj);
+    }
+    else{
+      foundMember.socketId = socket.id;
+      foundMember.isOnline = true;
+    }
+    fs.writeFile('./members.json', JSON.stringify(membersData), function(err){
+      if(err) throw err;
+    })
+    io.sockets.emit('new_connection', membersData);
+  })
+
   console.log('a user connected', socket.id);
   socket.on('all data', function(data){
     io.sockets.emit('all data', roomsData);
   })
 
+  socket.on('new_member', function(data){
+    console.log(data);
+    let foundMember = membersData.data.find((member) => member.user.toLowerCase() === data.username.toLowerCase());
+    console.log(foundMember);
+    if(!foundMember){
+      let obj = {
+        user: data.username,
+        socketId: socket.id,
+        isOnline: true
+      }
+      membersData.data.push(obj);
+      fs.writeFile('./members.json', JSON.stringify(membersData), function(err){
+        if(err) throw err;
+      })
+    }
+    else if(foundMember.socketId !== socket.id){
+      foundMember.socketId = socket.id;
+      fs.writeFile('./members.json', JSON.stringify(membersData), function(err){
+        if(err) throw err;
+      })
+    }
+    io.sockets.emit('new_member', membersData);
+  })
+
   socket.on('disconnect', function(data) {
+    let foundMember = membersData.data.find((member) => member.socketId === socket.id);
+    if(foundMember){
+      foundMember.socketId = '';
+      foundMember.isOnline = false;
+      fs.writeFile('./members.json', JSON.stringify(membersData), function(err){
+        if(err) throw err;
+      })
+      console.log('disconnected', socket.id);
+      io.sockets.emit('user_disconnect', membersData);
+    }
+  })
+
+  socket.on('user_disconnect', function(data) {
+    let foundMember = membersData.data.find((member) => member.socketId === socket.id);
+    foundMember.socketId = '';
+    foundMember.isOnline = false;
+    fs.writeFile('./members.json', JSON.stringify(membersData), function(err){
+      if(err) throw err;
+    })
     console.log('disconnected', socket.id);
-    io.sockets.emit('user_disconnect', roomsData);
+    io.sockets.emit('user_disconnect', membersData);
   })
 
 })

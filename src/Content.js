@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './Content.module.css';
 import Header from './Header';
 import axios from 'axios';
 
 const Content = (props) => {
   const [myMessage, setMyMessage] = useState('');
+  const msgContainer = useRef(null);
+
+  function onMessageChange(e){
+    setMyMessage(e.target.value);
+  }
+
   function sendMessageRequest(e){
     e.preventDefault();
     if(!myMessage) return;
@@ -14,17 +20,27 @@ const Content = (props) => {
     }
     axios.post(`/rooms/${props.currentRoom.roomId}`, obj)
     .then((res) => {
-      props.emitMessage();
-      setMyMessage('');
-      console.log(res);
+        props.emitNewMember();
+        props.emitMessage();
+        setMyMessage('');
+        setTimeout(() => {
+          msgContainer.current.scrollTop = msgContainer.current.scrollHeight;
+        },100)
     })
+
   }
 
   if(!props.currentRoom || !Object.entries(props.currentRoom).length){
     return (
       <section className={styles.container}>
         <Header />
-        <h3>Please enter channel</h3>
+        <div className={styles['alt-wrapper']}>
+          <h3 className={styles['alt-message']}>
+            Join a channel too start chatting with people
+            <span className={styles['line-left']}></span>
+            <span className={styles['line-right']}></span>
+          </h3>
+        </div>
       </section>
     )
   }
@@ -32,7 +48,7 @@ const Content = (props) => {
     return (
       <section className={styles.container}>
         <Header currentRoom={props.currentRoom}/>
-        <div className={styles['message-container']}>
+        <div className={styles['message-container']} ref={msgContainer}>
           {
             props.currentRoom.messages.map((message) => {
               return(
@@ -45,7 +61,7 @@ const Content = (props) => {
           }
         </div>
         <form onSubmit={sendMessageRequest} className={styles['input-wrapper']}>
-          <input className={styles['message-input']} value={myMessage} onChange={(e) => setMyMessage(e.target.value)}/>
+          <input className={styles['message-input']} value={myMessage} onChange={onMessageChange}/>
         </form>
 
       </section>

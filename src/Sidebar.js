@@ -2,20 +2,16 @@ import React from 'react';
 import styles from './Sidebar.module.css';
 
 const Sidebar = (props) => {
-  console.log(props.currentRoom);
-
   function sortMembers(){
     let rv = [];
-    props.currentRoom.members.map((member) => {
-      if(member.isOnline){
-        rv.push(member);
-      }
-    })
-    props.currentRoom.members.map((member) => {
-      if(!member.isOnline){
-        rv.push(member);
-      }
-    })
+
+    for(let x of props.currentRoom.members){
+      let foundMember = props.membersData.find((member) => member.user === x.user);
+      rv.push(foundMember);
+    }
+    rv.sort(function(x, y) {
+      return (x.isOnline === y.isOnline)? 0 : x.isOnline? -1 : 1;
+    });
     return rv;
   }
 

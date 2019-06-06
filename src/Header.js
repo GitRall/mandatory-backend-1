@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './Header.module.css';
 
 const Header = (props) => {
-  console.log(props.currentRoom);
   if(!props.currentRoom){
     return(
       <header className={styles.header}>
