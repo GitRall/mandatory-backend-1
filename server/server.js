@@ -118,6 +118,26 @@ app.delete('/rooms/:id', (req, res) => {
   })
 })
 
+app.delete('/room/:roomId/msg/:msgId', (req, res) => {
+  let foundRoom = roomsData.data.find((room) => room.roomId === parseInt(req.params.roomId));
+  let msgIdx = foundRoom.messages.findIndex((msg) => msg.msgId === parseInt(req.params.msgId));
+  foundRoom.messages.splice(msgIdx, 1);
+  fs.writeFile('./rooms.json', JSON.stringify(roomsData), function(err){
+    if(err) throw err;
+    res.status(204).end();
+  })
+})
+
+app.patch('/room/:roomId/msg/:msgId', (req, res) => {
+  let foundRoom = roomsData.data.find((room) => room.roomId === parseInt(req.params.roomId));
+  let foundMsg = foundRoom.messages.find((msg) => msg.msgId === parseInt(req.params.msgId));
+  foundMsg.message = req.body.message;
+  fs.writeFile('./rooms.json', JSON.stringify(roomsData), function(err){
+    if(err) throw err;
+    res.status(201).send({data: foundMsg.message});
+  })
+})
+
 //Server setup
 let server = app.listen(port, () => console.log(`Listening on port ${port}!`));
 
