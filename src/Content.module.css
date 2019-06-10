@@ -105,6 +105,7 @@
 }
 .msg{
   font-size: 1.6rem;
+  word-wrap: break-word;
 }
 
 .alt-wrapper{
