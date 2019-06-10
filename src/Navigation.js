@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Navigation.module.css';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Navigation = (props) => {
 
@@ -8,7 +8,7 @@ const Navigation = (props) => {
     return props.rooms.map((room) => {
       return (
         <li key={room.roomId} className={styles['list-item']}>
-          <Link to={`/home/${room.roomName}`} className={styles['list-link']}>{room.roomName}</Link>
+          <NavLink to={`/home/${room.roomName}`} className={styles['list-link']} activeStyle={{background: '#3f403b'}}>{room.roomName}</NavLink>
         </li>
       )
     })
@@ -23,6 +23,9 @@ const Navigation = (props) => {
         </li>
         <li className={styles['list-item']}>
           <button className={styles['nav-btn']} onClick={props.showRemoveModal}>Remove channel</button>
+        </li>
+        <li className={styles['list-item']}>
+          <button className={styles['nav-btn']} onClick={props.redirectLoginFunc}>Change username</button>
         </li>
       </ul>
       <h4 className={styles['nav-title']}>Channels</h4>

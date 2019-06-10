@@ -21,9 +21,14 @@ const Home = (props) => {
   const [currentRoom, setCurrentRoom] = useState({});
   const [createModal, setCreateModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
+  const [membersData, setMembersData] = useState([]);
 
   function emitData(){
     socket.emit('all data');
+  }
+
+  function newMember(){
+    socket.emit('new_member', { username });
   }
 
   function getNewRoom(){
@@ -47,26 +52,42 @@ const Home = (props) => {
       return;
     }
     else {
+      setUsername(props.location.state.username);
+
       socket = io('http://localhost:3001/');
       socket.on('connect', function(){
+        socket.emit('new_connection', props.location.state.username);
         console.log('connected');
+        console.log(socket);
       })
-      socket.on('disconnect', function(){
-        console.log('disconnected');
+      socket.on('new_connection', function(data){
+        setMembersData(data.data);
       })
       socket.on('all data', function(data){
-        console.log(data);
-        console.log(socket);
         setRooms(data.data);
       })
-      console.log(socket);
-      setUsername(props.location.state.username);
+      socket.on('new_member', function(data){
+        setMembersData(data.data);
+      })
+      socket.on('user_disconnect', function(data){
+        setMembersData(data.data);
+      })
     }
     axios.get('/rooms')
     .then((res) => {
       setRooms(res.data.data);
     })
   }, [])
+
+  function redirectLoginFunc(){
+    new Promise ((resolve, reject) => {
+      socket.emit('user_disconnect');
+      resolve();
+    })
+    .then(() => {
+      setRedirectLogin(true);
+    })
+  }
 
   if(redirectLogin){
     return (
@@ -75,9 +96,9 @@ const Home = (props) => {
   }
   return (
     <div className={styles.container}>
-      <Navigation rooms={rooms} showCreateModal={() => setCreateModal(true)} showRemoveModal={() => setRemoveModal(true)} username={username}/>
-      <Content currentRoom={currentRoom} username={username} getNewRoom={getNewRoom} emitMessage={emitData}/>
-      <Sidebar />
+      <Navigation rooms={rooms} showCreateModal={() => setCreateModal(true)} showRemoveModal={() => setRemoveModal(true)} username={username} redirectLoginFunc={redirectLoginFunc}/>
+      <Content currentRoom={currentRoom} username={username} getNewRoom={getNewRoom} emitMessage={emitData} emitNewMember={newMember} />
+      <Sidebar currentRoom={currentRoom} membersData={membersData}/>
       { createModal ? <CreateRoom hideCreateModal={() => setCreateModal(false)} emitCreateRoom={emitData} /> : null }
       { removeModal ? <RemoveRoom hideRemoveModal={() => setRemoveModal(false)} emitRemoveRoom={emitData} /> : null }
     </div>

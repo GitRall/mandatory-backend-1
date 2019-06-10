@@ -7,6 +7,7 @@
   background: #373A36;
 }
 .login-wrapper{
+  position: relative;
   width: 30%;
   min-width: 300px;
   display: flex;
@@ -28,6 +29,7 @@
   border-radius: 5px;
   color: #e1e6d7;
   margin-top: 3px;
+  box-sizing: border-box;
 }
 .connect-btn{
   font-size: 2.4rem;
@@ -36,4 +38,24 @@
   padding: 5px 20px 5px 20px;
   border-radius: 5px;
   cursor: pointer;
+}
+.error-msg{
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-size: 1.6rem;
+  color: #FBC02D;
+  animation: shake 0.2s linear;
+}
+@keyframes shake {
+  0%{
+    transform: translate(-50%, 0);
+  }
+  50%{
+    transform: translate(-50%, -2px);
+  }
+  100%{
+    transform: translate(-50%, 0);
+  }
 }
