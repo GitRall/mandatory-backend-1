@@ -34,7 +34,6 @@ const Home = (props) => {
   function getNewRoom(){
     axios.get('/rooms')
     .then((res) => {
-      console.log(res);
       setRooms(res.data.data);
       setCreateModal(false);
       setRemoveModal(false);
@@ -58,7 +57,6 @@ const Home = (props) => {
       socket.on('connect', function(){
         socket.emit('new_connection', props.location.state.username);
         console.log('connected');
-        console.log(socket);
       })
       socket.on('new_connection', function(data){
         setMembersData(data.data);

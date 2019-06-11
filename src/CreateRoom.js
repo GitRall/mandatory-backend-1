@@ -17,7 +17,6 @@ const CreateRoom = (props) => {
     }
     axios.post('/rooms', obj, { cancelToken: source.token })
     .then((res) => {
-      console.log(res);
       props.emitCreateRoom();
       closeCreateModal();
     })

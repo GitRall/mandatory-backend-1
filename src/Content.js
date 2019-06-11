@@ -1,7 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './Content.module.css';
 import Header from './Header';
+import Emoji from './Emoji';
 import axios from 'axios';
+
+const emojisData = [
+  {str: ':grin:', icon: '😀'},
+  {str: ':sweat_smile:', icon: '😃'},
+  {str: ':heart_eyes:', icon: '😍'},
+  {str: ':heart:', icon: '🧡'},
+  {str: ':cry:', icon: '😢'},
+  {str: ':joy:', icon: '😂'},
+  {str: ':girl:', icon: '👧'},
+  {str: ':boy:', icon: '👦'},
+  {str: ':beer:', icon: '🍺'},
+  {str: ':older_man:', icon: '👴'},
+  {str: ':older_woman:', icon: '👵'}
+]
 
 const Content = (props) => {
   const [myMessage, setMyMessage] = useState('');
@@ -9,6 +24,38 @@ const Content = (props) => {
   const [editText, setEditText] = useState('');
   const msgContainer = useRef(null);
   const editInputRef = useRef(null);
+
+  function addEmoji(emoji){
+    let newMessage = myMessage + emoji;
+    setMyMessage(newMessage);
+  }
+
+  function msgContainsEmoji(){
+    for(let x of emojisData){
+      if(myMessage.includes(x.str)){
+        let newMessage = myMessage.replace(x.str, x.icon);
+        setMyMessage(newMessage);
+      }
+    }
+  }
+
+  useEffect(() => {
+    msgContainsEmoji();
+  },[myMessage]);
+
+  function editContainsEmoji(){
+    for(let x of emojisData){
+      if(editText.includes(x.str)){
+        let newEdit = editText.replace(x.str, x.icon);
+        setEditText(newEdit);
+      }
+    }
+  }
+
+  useEffect(() => {
+    editContainsEmoji();
+  },[editText]);
+
 
   function hideEditInput(e){
     setEditIdx(null);
@@ -123,6 +170,7 @@ const Content = (props) => {
         </div>
         <form onSubmit={sendMessageRequest} className={styles['input-wrapper']}>
           <input className={styles['message-input']} value={myMessage} onChange={onMessageChange}/>
+          <Emoji emojisData={emojisData} addEmoji={addEmoji}/>
         </form>
 
       </section>

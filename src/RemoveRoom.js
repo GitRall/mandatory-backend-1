@@ -13,7 +13,6 @@ const RemoveRoom = (props) => {
     .then((res) => {
       props.emitRemoveRoom();
       props.hideRemoveModal();
-      console.log(res);
     })
     .catch((err) => {
       if(axios.isCancel(err)){
@@ -27,7 +26,6 @@ const RemoveRoom = (props) => {
     axios.get('/rooms', { cancelToken: source.token })
     .then((res) => {
       setRooms(res.data.data);
-      console.log(res.data.data);
     })
     .catch((err) => {
       if(axios.isCancel(err)){
